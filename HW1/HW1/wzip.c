@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	else {
-		for (int i = 1; i < 2; i++)
+		for (int i = 1; i < argc; i++)
 			compress(argv[i]);
 
 		fwrite(&count, sizeof(int), 1, stdout);
@@ -36,17 +36,13 @@ void compress(char* fileLocation) {
 		}
 
 		if (count > 0) {
-			if (current == previous) {
-				count++;
-			} else {
+			if (current != previous) {
 				fwrite(&count, sizeof(int), 1, stdout);
 				fwrite(&previous, sizeof(char), 1, stdout);
 				count = 0;
 			}
 		}
-		else {
-			count++;
-		}
+		count++;
 		previous = current;
 	}
 	fclose(fp);
