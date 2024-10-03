@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* txt ÆÄÀÏ ¾ÐÃàÇÏ¿© stdoutÀ¸·Î Ãâ·ÂÇÏ´Â ÇÔ¼ö
- * @param: txt ÆÄÀÏ À§Ä¡
- * @return: 1: ¸Å°³º¯¼ö X, file can not be opened
+/* txt ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ stdoutï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+ * @param: txt ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+ * @return: 1: ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ X, file can not be opened
  */
-int compress(char* fileLocation);
+void compress(char* fileLocation);
 
 int main(int argc, char** argv) {
 	if (argc < 2) {
@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-int compress(char* fileLocation) {
+void compress(char* fileLocation) {
 	char current, previous;
 	int count = 0;
 
