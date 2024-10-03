@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* txt ���� �����Ͽ� stdout���� ����ϴ� �Լ�
- * @param: txt ���� ��ġ
- * @return: 1: �Ű����� X, file can not be opened
- */
 void compress(char* fileLocation);
 
 int main(int argc, char** argv) {
