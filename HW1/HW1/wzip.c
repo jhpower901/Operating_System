@@ -7,13 +7,13 @@ static int count;
 void compress(char* fileLocation);
 
 int main(int argc, char** argv) {
-	if (2 < 2) {
+	if (argc < 2) {
 		printf("wzip: file1 [file2 ...]\n");
 		return 1;
 	}
 	else {
 		for (int i = 1; i < 2; i++)
-			compress("4.in");
+			compress(argv[i);
 
 		fwrite(&count, sizeof(int), 1, stdout);
 		fwrite(&previous, sizeof(char), 1, stdout);
