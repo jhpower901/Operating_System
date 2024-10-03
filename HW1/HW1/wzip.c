@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static char current, previous;
+static int count;
+
 void compress(char* fileLocation);
 
 int main(int argc, char** argv) {
@@ -11,14 +14,13 @@ int main(int argc, char** argv) {
 	else {
 		for (int i = 1; i < argc; i++)
 			compress(argv[i]);
+		fwrite(&count, sizeof(int), 1, stdout);
+		fwrite(&previous, sizeof(char), 1, stdout);
 	}
 	return 0;
 }
 
 void compress(char* fileLocation) {
-	char current, previous;
-	int count = 0;
-
 	FILE* fp = NULL;
 	fp = fopen(fileLocation, "r");
 	if (fp == NULL) {
@@ -29,10 +31,6 @@ void compress(char* fileLocation) {
 	while (1) {
 		current = fgetc(fp);
 		if (current == EOF) {
-			if (count > 0) {
-				fwrite(&count, sizeof(int), 1, stdout);
-				fwrite(&previous, sizeof(char), 1, stdout);
-			}
 			break;
 		}
 
