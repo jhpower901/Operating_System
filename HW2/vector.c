@@ -53,8 +53,8 @@ INT* push_vector(Vector* v, int index, char* data) {
         printf("done\n");
         return v->data + v->element_count++;
     } else {
-        for (int i = v->element_count; index <= i; i--) {
-            *(v->data + i) = *(v->data + i - 1);
+        for (int i = v->element_count - 1; index <= i; i--) {
+            *(v->data + i + 1)= *(v->data + i);
         }
         *(v->data + index) = atoi(data);
         v->element_count++;
@@ -67,12 +67,12 @@ void print_vector(Vector* v) {
     printf("[print Vector]\n");
     printf("size of vector: %d\n", v->size);
     printf("number of vector element: %d\n\n", v->element_count);
-    printf(" No|     adress     | data\n");
-    printf("---+----------------+-----\n");
+    printf(" No|  adress  | data\n");
+    printf("---+----------+-----\n");
     for (int i = 0; i < v->element_count; i++) {
         printf(" %02d %p  %04d\n", i, v->data + i, *(v->data + i));
     }
-    printf("--------------------------\n");
+    printf("--------------------\n");
 }
 
 void get_vector(Vector* v, int index) {
