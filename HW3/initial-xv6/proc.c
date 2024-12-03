@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#define PHI 0x9e3779b9
 
 struct {
   struct spinlock lock;
@@ -24,6 +25,43 @@ void
 pinit(void)
 {
   initlock(&ptable.lock, "ptable");
+}
+
+
+//random 발생 함수
+static uint Q[4096], c = 362436;
+
+//random seed 설정
+void srand(uint x)
+{
+  int i;
+
+  Q[0] = x;
+  Q[1] = x + PHI;
+  Q[2] = x + PHI + PHI;
+
+  for (i = 3; i < 4096; i++)
+    Q[i] = Q[i - 3] ^ Q[i - 2] ^ PHI ^ i;
+}
+
+//random 발생
+uint rand(void)
+{
+  if(sizeof(unsigned long long) != 8){
+    return 0;
+  }
+  unsigned long long t, a = 18782LL;
+  static uint i = 4095;
+  uint x, r = 0xfffffffe;
+  i = (i + 1) & 4095;
+  t = a * Q[i] + c;
+  c = (t >> 32);
+  x = t + c;
+  if (x < c) {
+    x++;
+    c++;
+  }
+  return (Q[i] = r - x);
 }
 
 // Must be called with interrupts disabled
@@ -339,12 +377,22 @@ scheduler(void)
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
-      c->proc = p;
+      c->proc = p;      //프로세스 할당
       switchuvm(p);
       p->state = RUNNING;
 
+    /* 지금은 round robbin으로 scheduling되어 있다.
+     * timmer interruped가 불릴 때 마다 context swtich하는 시간을 측정한다.
+    **/
+
+      //context switch 전 시간 기록
+      const int tickstarts = ticks;
+
       swtch(&(c->scheduler), p->context);
       switchkvm();
+
+      //델타 시간(현재 프로세스가 실행된 시간) 만큼 더함
+      p->ticks += ticks - tickstarts;
 
       // Process is done running for now.
       // It should have changed its p->state before coming back.
