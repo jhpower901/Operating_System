@@ -66,6 +66,11 @@ sys_dup(void)
   return fd;
 }
 
+// TODO: read() 호출 횟수를 세기 위한 전역 변수 readcount 선언
+int readcount = 0;
+// TODO: readcount 변수를 위한 lock 구조체 선언
+struct spinlock readlock;
+
 int
 sys_read(void)
 {
@@ -73,9 +78,21 @@ sys_read(void)
   int n;
   char *p;
 
+  // TODO: readcount 변수 접근을 위한 spinlock
+  acquire(&readlock);
+  readcount++;
+  release(&readlock);
+
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
   return fileread(f, p, n);
+}
+
+// TODO: getreadcount 구현
+int
+sys_getreadcount(void)
+{
+  return readcount;
 }
 
 int
